@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v7.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v7.0": {
+      "dotnetp2.DTO/1.0.0": {
+        "runtime": {
+          "dotnetp2.DTO.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "dotnetp2.DTO/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
