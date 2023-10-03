@@ -23,3 +23,6 @@ D:\Amar\20230929_Debug\Apps\1\1666\202310033647\dotnetp2\dotnetp2.Service\obj\De
 D:\Amar\20230929_Debug\Apps\1\1666\202310033647\dotnetp2\dotnetp2.Service\obj\Debug\net7.0\dotnetp2.Service.AssemblyInfoInputs.cache
 D:\Amar\20230929_Debug\Apps\1\1666\202310033647\dotnetp2\dotnetp2.Service\obj\Debug\net7.0\dotnetp2.Service.AssemblyInfo.cs
 D:\Amar\20230929_Debug\Apps\1\1666\202310033647\dotnetp2\dotnetp2.Service\obj\Debug\net7.0\dotnetp2.Service.csproj.CoreCompileInputs.cache
+D:\Amar\20230929_Debug\Apps\1\1669\202310030319\dotnetp2\dotnetp2.Service\obj\Debug\net7.0\dotnetp2.Service.dll
+D:\Amar\20230929_Debug\Apps\1\1669\202310030319\dotnetp2\dotnetp2.Service\obj\Debug\net7.0\refint\dotnetp2.Service.dll
+D:\Amar\20230929_Debug\Apps\1\1669\202310030319\dotnetp2\dotnetp2.Service\obj\Debug\net7.0\dotnetp2.Service.pdb
