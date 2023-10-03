@@ -47,3 +47,6 @@ E:\Projects\Sacral\dotnet_service\Application.API\SacralAI.Code.Scheduler\bin\De
 E:\Projects\Sacral\dotnet_service\Application.API\SacralAI.Code.Scheduler\bin\Debug\Apps\1\1664\202309294847\dotnetp2\dotnetp2.API\bin\Debug\net7.0\runtimes\win-x86\native\sni.dll
 E:\Projects\Sacral\dotnet_service\Application.API\SacralAI.Code.Scheduler\bin\Debug\Apps\1\1664\202309294847\dotnetp2\dotnetp2.API\bin\Debug\net7.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 E:\Projects\Sacral\dotnet_service\Application.API\SacralAI.Code.Scheduler\bin\Debug\Apps\1\1664\202309294847\dotnetp2\dotnetp2.API\bin\Debug\net7.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+D:\Amar\20230929_Debug\Apps\1\1666\202310033647\dotnetp2\dotnetp2.API\obj\Debug\net7.0\dotnetp2.API.dll
+D:\Amar\20230929_Debug\Apps\1\1666\202310033647\dotnetp2\dotnetp2.API\obj\Debug\net7.0\refint\dotnetp2.API.dll
+D:\Amar\20230929_Debug\Apps\1\1666\202310033647\dotnetp2\dotnetp2.API\obj\Debug\net7.0\dotnetp2.API.pdb
