@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
 using dotnetp2.DTO;
 
 namespace dotnetp2
 {
-    public class LoanApprovalModelRepository : ILoanApprovalModelRepository
+    public class LoanApprovalModelRepository : ILoanApprovalModelService
     {
         private readonly string _connectionString;
 
@@ -16,155 +15,132 @@ namespace dotnetp2
             _connectionString = connectionString;
         }
 
-        public async Task<int> CreateLoanApprovalModel(LoanApprovalModel loanApprovalModel)
+        public async Task<int> CreateLoanApprovalModelAsync(LoanApprovalModel loanApprovalModel)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "INSERT INTO LoanApprovalModel (Identification, ProofOfIncome, CreditHistory, EmploymentDetails, CreditCheckPassed, LoanAmount, InterestRateRange, VehicleValue, LoanOfferAccepted, LoanDisbursed) " +
-                               "VALUES (@Identification, @ProofOfIncome, @CreditHistory, @EmploymentDetails, @CreditCheckPassed, @LoanAmount, @InterestRateRange, @VehicleValue, @LoanOfferAccepted, @LoanDisbursed);" +
+                string query = "INSERT INTO LoanApprovalModel (Identification, ProofOfIncome, CreditHistory, EmploymentDetails, LoanAmount, InterestRate, VehicleValue, LoanAccepted, LoanDisbursed) " +
+                               "VALUES (@Identification, @ProofOfIncome, @CreditHistory, @EmploymentDetails, @LoanAmount, @InterestRate, @VehicleValue, @LoanAccepted, @LoanDisbursed); " +
                                "SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Identification", loanApprovalModel.Identification);
-                    command.Parameters.AddWithValue("@ProofOfIncome", loanApprovalModel.ProofOfIncome);
-                    command.Parameters.AddWithValue("@CreditHistory", loanApprovalModel.CreditHistory);
-                    command.Parameters.AddWithValue("@EmploymentDetails", loanApprovalModel.EmploymentDetails);
-                    command.Parameters.AddWithValue("@CreditCheckPassed", loanApprovalModel.CreditCheckPassed);
-                    command.Parameters.AddWithValue("@LoanAmount", loanApprovalModel.LoanAmount);
-                    command.Parameters.AddWithValue("@InterestRateRange", loanApprovalModel.InterestRateRange);
-                    command.Parameters.AddWithValue("@VehicleValue", loanApprovalModel.VehicleValue);
-                    command.Parameters.AddWithValue("@LoanOfferAccepted", loanApprovalModel.LoanOfferAccepted);
-                    command.Parameters.AddWithValue("@LoanDisbursed", loanApprovalModel.LoanDisbursed);
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Identification", loanApprovalModel.Identification);
+                command.Parameters.AddWithValue("@ProofOfIncome", loanApprovalModel.ProofOfIncome);
+                command.Parameters.AddWithValue("@CreditHistory", loanApprovalModel.CreditHistory);
+                command.Parameters.AddWithValue("@EmploymentDetails", loanApprovalModel.EmploymentDetails);
+                command.Parameters.AddWithValue("@LoanAmount", loanApprovalModel.LoanAmount);
+                command.Parameters.AddWithValue("@InterestRate", loanApprovalModel.InterestRate);
+                command.Parameters.AddWithValue("@VehicleValue", loanApprovalModel.VehicleValue);
+                command.Parameters.AddWithValue("@LoanAccepted", loanApprovalModel.LoanAccepted);
+                command.Parameters.AddWithValue("@LoanDisbursed", loanApprovalModel.LoanDisbursed);
 
-                    return (int)await command.ExecuteScalarAsync();
-                }
+                return (int)await command.ExecuteScalarAsync();
             }
         }
 
-        public async Task<LoanApprovalModel> GetLoanApprovalModel(int id)
+        public async Task<LoanApprovalModel> GetLoanApprovalModelAsync(int id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT * FROM LoanApprovalModel WHERE Id = @Id";
+                string query = "SELECT * FROM LoanApprovalModel WHERE Id = @Id;";
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Id", id);
 
-                using (SqlCommand command = new SqlCommand(query, connection))
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                if (await reader.ReadAsync())
                 {
-                    command.Parameters.AddWithValue("@Id", id);
-
-                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    return new LoanApprovalModel
                     {
-                        if (await reader.ReadAsync())
-                        {
-                            return MapLoanApprovalModel(reader);
-                        }
-                    }
+                        Id = (int)reader["Id"],
+                        Identification = (string)reader["Identification"],
+                        ProofOfIncome = (string)reader["ProofOfIncome"],
+                        CreditHistory = (string)reader["CreditHistory"],
+                        EmploymentDetails = (string)reader["EmploymentDetails"],
+                        LoanAmount = (decimal)reader["LoanAmount"],
+                        InterestRate = (decimal)reader["InterestRate"],
+                        VehicleValue = (decimal)reader["VehicleValue"],
+                        LoanAccepted = (bool)reader["LoanAccepted"],
+                        LoanDisbursed = (bool)reader["LoanDisbursed"]
+                    };
                 }
+                return null;
             }
-
-            return null;
         }
 
-        public async Task<List<LoanApprovalModel>> GetAllLoanApprovalModels()
+        public async Task<List<LoanApprovalModel>> GetAllLoanApprovalModelsAsync()
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "SELECT * FROM LoanApprovalModel";
+                string query = "SELECT * FROM LoanApprovalModel;";
+                SqlCommand command = new SqlCommand(query, connection);
 
-                using (SqlCommand command = new SqlCommand(query, connection))
+                SqlDataReader reader = await command.ExecuteReaderAsync();
+                List<LoanApprovalModel> loanApprovalModels = new List<LoanApprovalModel>();
+                while (await reader.ReadAsync())
                 {
-                    using (SqlDataReader reader = await command.ExecuteReaderAsync())
+                    loanApprovalModels.Add(new LoanApprovalModel
                     {
-                        List<LoanApprovalModel> loanApprovalModels = new List<LoanApprovalModel>();
-
-                        while (await reader.ReadAsync())
-                        {
-                            loanApprovalModels.Add(MapLoanApprovalModel(reader));
-                        }
-
-                        return loanApprovalModels;
-                    }
+                        Id = (int)reader["Id"],
+                        Identification = (string)reader["Identification"],
+                        ProofOfIncome = (string)reader["ProofOfIncome"],
+                        CreditHistory = (string)reader["CreditHistory"],
+                        EmploymentDetails = (string)reader["EmploymentDetails"],
+                        LoanAmount = (decimal)reader["LoanAmount"],
+                        InterestRate = (decimal)reader["InterestRate"],
+                        VehicleValue = (decimal)reader["VehicleValue"],
+                        LoanAccepted = (bool)reader["LoanAccepted"],
+                        LoanDisbursed = (bool)reader["LoanDisbursed"]
+                    });
                 }
+                return loanApprovalModels;
             }
         }
 
-        public async Task UpdateLoanApprovalModel(LoanApprovalModel loanApprovalModel)
+        public async Task UpdateLoanApprovalModelAsync(LoanApprovalModel loanApprovalModel)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "UPDATE LoanApprovalModel SET " +
-                               "Identification = @Identification, " +
-                               "ProofOfIncome = @ProofOfIncome, " +
-                               "CreditHistory = @CreditHistory, " +
-                               "EmploymentDetails = @EmploymentDetails, " +
-                               "CreditCheckPassed = @CreditCheckPassed, " +
-                               "LoanAmount = @LoanAmount, " +
-                               "InterestRateRange = @InterestRateRange, " +
-                               "VehicleValue = @VehicleValue, " +
-                               "LoanOfferAccepted = @LoanOfferAccepted, " +
-                               "LoanDisbursed = @LoanDisbursed " +
-                               "WHERE Id = @Id";
+                string query = "UPDATE LoanApprovalModel SET Identification = @Identification, ProofOfIncome = @ProofOfIncome, CreditHistory = @CreditHistory, " +
+                               "EmploymentDetails = @EmploymentDetails, LoanAmount = @LoanAmount, InterestRate = @InterestRate, VehicleValue = @VehicleValue, " +
+                               "LoanAccepted = @LoanAccepted, LoanDisbursed = @LoanDisbursed WHERE Id = @Id;";
 
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Identification", loanApprovalModel.Identification);
-                    command.Parameters.AddWithValue("@ProofOfIncome", loanApprovalModel.ProofOfIncome);
-                    command.Parameters.AddWithValue("@CreditHistory", loanApprovalModel.CreditHistory);
-                    command.Parameters.AddWithValue("@EmploymentDetails", loanApprovalModel.EmploymentDetails);
-                    command.Parameters.AddWithValue("@CreditCheckPassed", loanApprovalModel.CreditCheckPassed);
-                    command.Parameters.AddWithValue("@LoanAmount", loanApprovalModel.LoanAmount);
-                    command.Parameters.AddWithValue("@InterestRateRange", loanApprovalModel.InterestRateRange);
-                    command.Parameters.AddWithValue("@VehicleValue", loanApprovalModel.VehicleValue);
-                    command.Parameters.AddWithValue("@LoanOfferAccepted", loanApprovalModel.LoanOfferAccepted);
-                    command.Parameters.AddWithValue("@LoanDisbursed", loanApprovalModel.LoanDisbursed);
-                    command.Parameters.AddWithValue("@Id", loanApprovalModel.Id);
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Id", loanApprovalModel.Id);
+                command.Parameters.AddWithValue("@Identification", loanApprovalModel.Identification);
+                command.Parameters.AddWithValue("@ProofOfIncome", loanApprovalModel.ProofOfIncome);
+                command.Parameters.AddWithValue("@CreditHistory", loanApprovalModel.CreditHistory);
+                command.Parameters.AddWithValue("@EmploymentDetails", loanApprovalModel.EmploymentDetails);
+                command.Parameters.AddWithValue("@LoanAmount", loanApprovalModel.LoanAmount);
+                command.Parameters.AddWithValue("@InterestRate", loanApprovalModel.InterestRate);
+                command.Parameters.AddWithValue("@VehicleValue", loanApprovalModel.VehicleValue);
+                command.Parameters.AddWithValue("@LoanAccepted", loanApprovalModel.LoanAccepted);
+                command.Parameters.AddWithValue("@LoanDisbursed", loanApprovalModel.LoanDisbursed);
 
-                    await command.ExecuteNonQueryAsync();
-                }
+                await command.ExecuteNonQueryAsync();
             }
         }
 
-        public async Task DeleteLoanApprovalModel(int id)
+        public async Task DeleteLoanApprovalModelAsync(int id)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
                 await connection.OpenAsync();
 
-                string query = "DELETE FROM LoanApprovalModel WHERE Id = @Id";
+                string query = "DELETE FROM LoanApprovalModel WHERE Id = @Id;";
 
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@Id", id);
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Id", id);
 
-                    await command.ExecuteNonQueryAsync();
-                }
+                await command.ExecuteNonQueryAsync();
             }
-        }
-
-        private LoanApprovalModel MapLoanApprovalModel(SqlDataReader reader)
-        {
-            return new LoanApprovalModel
-            {
-                Id = (int)reader["Id"],
-                Identification = reader["Identification"].ToString(),
-                ProofOfIncome = reader["ProofOfIncome"].ToString(),
-                CreditHistory = reader["CreditHistory"].ToString(),
-                EmploymentDetails = reader["EmploymentDetails"].ToString(),
-                CreditCheckPassed = (bool)reader["CreditCheckPassed"],
-                LoanAmount = (decimal)reader["LoanAmount"],
-                InterestRateRange = (decimal)reader["InterestRateRange"],
-                VehicleValue = (decimal)reader["VehicleValue"],
-                LoanOfferAccepted = (bool)reader["LoanOfferAccepted"],
-                LoanDisbursed = (bool)reader["LoanDisbursed"]
-            };
         }
     }
 }

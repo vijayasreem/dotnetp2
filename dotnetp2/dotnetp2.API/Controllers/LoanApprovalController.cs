@@ -1,7 +1,7 @@
 ﻿
-using Microsoft.AspNetCore.Mvc;
 using dotnetp2.DTO;
 using dotnetp2.Service;
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,43 +19,46 @@ namespace dotnetp2.API
         }
 
         [HttpPost]
-        public async Task<ActionResult<int>> CreateLoanApprovalModel(LoanApprovalModel loanApprovalModel)
+        public async Task<ActionResult<int>> CreateLoanApprovalModelAsync(LoanApprovalModel loanApprovalModel)
         {
-            var id = await _loanApprovalModelService.CreateLoanApprovalModel(loanApprovalModel);
-            return Ok(id);
+            var id = await _loanApprovalModelService.CreateLoanApprovalModelAsync(loanApprovalModel);
+            return id;
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<LoanApprovalModel>> GetLoanApprovalModel(int id)
+        public async Task<ActionResult<LoanApprovalModel>> GetLoanApprovalModelAsync(int id)
         {
-            var loanApprovalModel = await _loanApprovalModelService.GetLoanApprovalModel(id);
-            
+            var loanApprovalModel = await _loanApprovalModelService.GetLoanApprovalModelAsync(id);
             if (loanApprovalModel == null)
             {
                 return NotFound();
             }
-            
-            return Ok(loanApprovalModel);
+            return loanApprovalModel;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<LoanApprovalModel>>> GetAllLoanApprovalModels()
+        public async Task<ActionResult<List<LoanApprovalModel>>> GetAllLoanApprovalModelsAsync()
         {
-            var loanApprovalModels = await _loanApprovalModelService.GetAllLoanApprovalModels();
-            return Ok(loanApprovalModels);
+            var loanApprovalModels = await _loanApprovalModelService.GetAllLoanApprovalModelsAsync();
+            return loanApprovalModels;
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateLoanApprovalModel(LoanApprovalModel loanApprovalModel)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateLoanApprovalModelAsync(int id, LoanApprovalModel loanApprovalModel)
         {
-            await _loanApprovalModelService.UpdateLoanApprovalModel(loanApprovalModel);
+            if (id != loanApprovalModel.Id)
+            {
+                return BadRequest();
+            }
+            
+            await _loanApprovalModelService.UpdateLoanApprovalModelAsync(loanApprovalModel);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLoanApprovalModel(int id)
+        public async Task<IActionResult> DeleteLoanApprovalModelAsync(int id)
         {
-            await _loanApprovalModelService.DeleteLoanApprovalModel(id);
+            await _loanApprovalModelService.DeleteLoanApprovalModelAsync(id);
             return NoContent();
         }
     }

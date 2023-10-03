@@ -1,8 +1,8 @@
 ﻿public interface ILoanApprovalModelService
 {
-    Task<int> CreateLoanApprovalModel(LoanApprovalModel loanApprovalModel);
-    Task<LoanApprovalModel> GetLoanApprovalModel(int id);
-    Task<List<LoanApprovalModel>> GetAllLoanApprovalModels();
-    Task UpdateLoanApprovalModel(LoanApprovalModel loanApprovalModel);
-    Task DeleteLoanApprovalModel(int id);
+    Task<int> CreateLoanApprovalModelAsync(LoanApprovalModel loanApprovalModel);
+    Task<LoanApprovalModel> GetLoanApprovalModelAsync(int id);
+    Task<List<LoanApprovalModel>> GetAllLoanApprovalModelsAsync();
+    Task UpdateLoanApprovalModelAsync(LoanApprovalModel loanApprovalModel);
+    Task DeleteLoanApprovalModelAsync(int id);
 }

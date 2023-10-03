@@ -7,36 +7,36 @@ namespace dotnetp2.Service
 {
     public class LoanApprovalModelService : ILoanApprovalModelService
     {
-        private readonly ILoanApprovalModelRepository _repository;
+        private readonly ILoanApprovalModelDataAccess _loanApprovalModelDataAccess;
 
-        public LoanApprovalModelService(ILoanApprovalModelRepository repository)
+        public LoanApprovalModelService(ILoanApprovalModelDataAccess loanApprovalModelDataAccess)
         {
-            _repository = repository;
+            _loanApprovalModelDataAccess = loanApprovalModelDataAccess;
         }
 
-        public async Task<int> CreateLoanApprovalModel(LoanApprovalModel loanApprovalModel)
+        public async Task<int> CreateLoanApprovalModelAsync(LoanApprovalModel loanApprovalModel)
         {
-            return await _repository.CreateLoanApprovalModel(loanApprovalModel);
+            return await _loanApprovalModelDataAccess.CreateLoanApprovalModelAsync(loanApprovalModel);
         }
 
-        public async Task<LoanApprovalModel> GetLoanApprovalModel(int id)
+        public async Task<LoanApprovalModel> GetLoanApprovalModelAsync(int id)
         {
-            return await _repository.GetLoanApprovalModel(id);
+            return await _loanApprovalModelDataAccess.GetLoanApprovalModelAsync(id);
         }
 
-        public async Task<List<LoanApprovalModel>> GetAllLoanApprovalModels()
+        public async Task<List<LoanApprovalModel>> GetAllLoanApprovalModelsAsync()
         {
-            return await _repository.GetAllLoanApprovalModels();
+            return await _loanApprovalModelDataAccess.GetAllLoanApprovalModelsAsync();
         }
 
-        public async Task UpdateLoanApprovalModel(LoanApprovalModel loanApprovalModel)
+        public async Task UpdateLoanApprovalModelAsync(LoanApprovalModel loanApprovalModel)
         {
-            await _repository.UpdateLoanApprovalModel(loanApprovalModel);
+            await _loanApprovalModelDataAccess.UpdateLoanApprovalModelAsync(loanApprovalModel);
         }
 
-        public async Task DeleteLoanApprovalModel(int id)
+        public async Task DeleteLoanApprovalModelAsync(int id)
         {
-            await _repository.DeleteLoanApprovalModel(id);
+            await _loanApprovalModelDataAccess.DeleteLoanApprovalModelAsync(id);
         }
     }
 }
