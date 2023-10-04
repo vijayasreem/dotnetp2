@@ -44,3 +44,11 @@ D:\Amar\20230929_Debug\Apps\1\1680\202310033737\dotnetp2\dotnetp2.DataAccess\obj
 D:\Amar\20230929_Debug\Apps\1\1680\202310033737\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.dll
 D:\Amar\20230929_Debug\Apps\1\1680\202310033737\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\refint\dotnetp2.DataAccess.dll
 D:\Amar\20230929_Debug\Apps\1\1680\202310033737\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.pdb
+D:\Amar\20230929_Debug\Apps\1\1684\202310041939\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.dll
+D:\Amar\20230929_Debug\Apps\1\1684\202310041939\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\refint\dotnetp2.DataAccess.dll
+D:\Amar\20230929_Debug\Apps\1\1684\202310041939\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.pdb
+D:\Amar\20230929_Debug\Apps\1\1684\202310041939\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.csproj.AssemblyReference.cache
+D:\Amar\20230929_Debug\Apps\1\1684\202310041939\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.GeneratedMSBuildEditorConfig.editorconfig
+D:\Amar\20230929_Debug\Apps\1\1684\202310041939\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.AssemblyInfoInputs.cache
+D:\Amar\20230929_Debug\Apps\1\1684\202310041939\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.AssemblyInfo.cs
+D:\Amar\20230929_Debug\Apps\1\1684\202310041939\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.csproj.CoreCompileInputs.cache
