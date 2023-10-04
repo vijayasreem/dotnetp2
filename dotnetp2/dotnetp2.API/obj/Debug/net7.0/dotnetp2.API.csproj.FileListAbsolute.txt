@@ -59,3 +59,6 @@ D:\Amar\20230929_Debug\Apps\1\1680\202310033737\dotnetp2\dotnetp2.API\obj\Debug\
 D:\Amar\20230929_Debug\Apps\1\1684\202310041939\dotnetp2\dotnetp2.API\obj\Debug\net7.0\dotnetp2.API.dll
 D:\Amar\20230929_Debug\Apps\1\1684\202310041939\dotnetp2\dotnetp2.API\obj\Debug\net7.0\refint\dotnetp2.API.dll
 D:\Amar\20230929_Debug\Apps\1\1684\202310041939\dotnetp2\dotnetp2.API\obj\Debug\net7.0\dotnetp2.API.pdb
+D:\Amar\20230929_Debug\Apps\1\1686\202310044349\dotnetp2\dotnetp2.API\obj\Debug\net7.0\dotnetp2.API.dll
+D:\Amar\20230929_Debug\Apps\1\1686\202310044349\dotnetp2\dotnetp2.API\obj\Debug\net7.0\refint\dotnetp2.API.dll
+D:\Amar\20230929_Debug\Apps\1\1686\202310044349\dotnetp2\dotnetp2.API\obj\Debug\net7.0\dotnetp2.API.pdb
