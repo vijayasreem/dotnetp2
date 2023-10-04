@@ -55,3 +55,6 @@ D:\Amar\20230929_Debug\Apps\1\1684\202310041939\dotnetp2\dotnetp2.DataAccess\obj
 D:\Amar\20230929_Debug\Apps\1\1686\202310044349\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.dll
 D:\Amar\20230929_Debug\Apps\1\1686\202310044349\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\refint\dotnetp2.DataAccess.dll
 D:\Amar\20230929_Debug\Apps\1\1686\202310044349\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.pdb
+D:\Amar\20230929_Debug\Apps\1\1688\202310041533\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.dll
+D:\Amar\20230929_Debug\Apps\1\1688\202310041533\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\refint\dotnetp2.DataAccess.dll
+D:\Amar\20230929_Debug\Apps\1\1688\202310041533\dotnetp2\dotnetp2.DataAccess\obj\Debug\net7.0\dotnetp2.DataAccess.pdb
