@@ -1,116 +1,79 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.Data.SqlClient;
-
-namespace dotnetp2
+﻿namespace dotnetp2.Repository
 {
-    public class ReportDeliveryConfigurationRepository : IReportDeliveryConfigurationService
+    using dotnetp2.DTO;
+    using System.Collections.Generic;
+    using System.Data;
+    using System.Data.SqlClient;
+    using System.Threading.Tasks;
+
+    public class ReportDeliveryConfigurationRepository : IReportDeliveryConfigurationRepository
     {
         private readonly string _connectionString;
-
         public ReportDeliveryConfigurationRepository(string connectionString)
         {
             _connectionString = connectionString;
         }
 
-        public async Task<List<ReportDeliveryConfigurationModel>> GetAllAsync()
+        // Async CRUD Operations
+        public async Task<ReportDeliveryConfigurationModel> GetReportDeliveryConfiguration(int id)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                await connection.OpenAsync();
-
-                var command = new SqlCommand("SELECT * FROM ReportDeliveryConfiguration", connection);
-
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    var configurations = new List<ReportDeliveryConfigurationModel>();
-
-                    while (reader.Read())
-                    {
-                        var configuration = new ReportDeliveryConfigurationModel
-                        {
-                            DestinationType = (DestinationType)reader.GetInt32(reader.GetOrdinal("DestinationType")),
-                            DestinationAddress = reader.GetString(reader.GetOrdinal("DestinationAddress"))
-                        };
-
-                        configurations.Add(configuration);
-                    }
-
-                    return configurations;
-                }
+                var param = new DynamicParameters();
+                param.Add("@Id", id);
+                var reportDeliveryConfiguration = await conn.QuerySingleAsync<ReportDeliveryConfigurationModel>("GET_REPORT_DELIVERY_CONFIGURATION", param, commandType: CommandType.StoredProcedure);
+                return reportDeliveryConfiguration;
             }
         }
 
-        public async Task<ReportDeliveryConfigurationModel> GetByIdAsync(int id)
+        public async Task<IEnumerable<ReportDeliveryConfigurationModel>> GetAllReportDeliveryConfigurations()
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                await connection.OpenAsync();
-
-                var command = new SqlCommand("SELECT * FROM ReportDeliveryConfiguration WHERE Id = @Id", connection);
-                command.Parameters.AddWithValue("@Id", id);
-
-                using (var reader = await command.ExecuteReaderAsync())
-                {
-                    if (await reader.ReadAsync())
-                    {
-                        var configuration = new ReportDeliveryConfigurationModel
-                        {
-                            DestinationType = (DestinationType)reader.GetInt32(reader.GetOrdinal("DestinationType")),
-                            DestinationAddress = reader.GetString(reader.GetOrdinal("DestinationAddress"))
-                        };
-
-                        return configuration;
-                    }
-
-                    return null;
-                }
+                var reportDeliveryConfigurations = await conn.QueryAsync<ReportDeliveryConfigurationModel>("GET_ALL_REPORT_DELIVERY_CONFIGURATIONS", commandType: CommandType.StoredProcedure);
+                return reportDeliveryConfigurations;
             }
         }
 
-        public async Task<int> AddAsync(ReportDeliveryConfigurationModel configuration)
+        public async Task<int> CreateReportDeliveryConfiguration(ReportDeliveryConfigurationModel reportDeliveryConfiguration)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                await connection.OpenAsync();
-
-                var command = new SqlCommand("INSERT INTO ReportDeliveryConfiguration (DestinationType, DestinationAddress) " +
-                                             "VALUES (@DestinationType, @DestinationAddress); SELECT SCOPE_IDENTITY();", connection);
-                command.Parameters.AddWithValue("@DestinationType", (int)configuration.DestinationType);
-                command.Parameters.AddWithValue("@DestinationAddress", configuration.DestinationAddress);
-
-                var newId = await command.ExecuteScalarAsync();
-                return int.Parse(newId.ToString());
+                var param = new DynamicParameters();
+                param.Add("@DestinationType", reportDeliveryConfiguration.DestinationType);
+                param.Add("@DestinationAddress", reportDeliveryConfiguration.DestinationAddress);
+                param.Add("@DayOfWeek", reportDeliveryConfiguration.DayOfWeek);
+                param.Add("@DayOfMonth", reportDeliveryConfiguration.DayOfMonth);
+                param.Add("@DeliveryTime", reportDeliveryConfiguration.DeliveryTime);
+                var id = await conn.QuerySingleAsync<int>("CREATE_REPORT_DELIVERY_CONFIGURATION", param, commandType: CommandType.StoredProcedure);
+                return id;
             }
         }
 
-        public async Task UpdateAsync(ReportDeliveryConfigurationModel configuration)
+        public async Task<bool> UpdateReportDeliveryConfiguration(ReportDeliveryConfigurationModel reportDeliveryConfiguration)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                await connection.OpenAsync();
-
-                var command = new SqlCommand("UPDATE ReportDeliveryConfiguration " +
-                                             "SET DestinationType = @DestinationType, DestinationAddress = @DestinationAddress " +
-                                             "WHERE Id = @Id", connection);
-                command.Parameters.AddWithValue("@DestinationType", (int)configuration.DestinationType);
-                command.Parameters.AddWithValue("@DestinationAddress", configuration.DestinationAddress);
-                command.Parameters.AddWithValue("@Id", configuration.Id);
-
-                await command.ExecuteNonQueryAsync();
+                var param = new DynamicParameters();
+                param.Add("@Id", reportDeliveryConfiguration.Id);
+                param.Add("@DestinationType", reportDeliveryConfiguration.DestinationType);
+                param.Add("@DestinationAddress", reportDeliveryConfiguration.DestinationAddress);
+                param.Add("@DayOfWeek", reportDeliveryConfiguration.DayOfWeek);
+                param.Add("@DayOfMonth", reportDeliveryConfiguration.DayOfMonth);
+                param.Add("@DeliveryTime", reportDeliveryConfiguration.DeliveryTime);
+                var isUpdated = await conn.ExecuteAsync("UPDATE_REPORT_DELIVERY_CONFIGURATION", param, commandType: CommandType.StoredProcedure);
+                return isUpdated > 0;
             }
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteReportDeliveryConfiguration(int id)
         {
-            using (var connection = new SqlConnection(_connectionString))
+            using (SqlConnection conn = new SqlConnection(_connectionString))
             {
-                await connection.OpenAsync();
-
-                var command = new SqlCommand("DELETE FROM ReportDeliveryConfiguration WHERE Id = @Id", connection);
-                command.Parameters.AddWithValue("@Id", id);
-
-                await command.ExecuteNonQueryAsync();
+                var param = new DynamicParameters();
+                param.Add("@Id", id);
+                var isDeleted = await conn.ExecuteAsync("DELETE_REPORT_DELIVERY_CONFIGURATION", param, commandType: CommandType.StoredProcedure);
+                return isDeleted > 0;
             }
         }
     }

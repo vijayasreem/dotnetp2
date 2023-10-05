@@ -1,114 +1,122 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using dotnetp2.DataAccess;
-using dotnetp2.DTO;
+﻿SharePoint,
+        Custom
+    }
 
+    public enum FrequencyType
+    {
+        Daily,
+        Weekly,
+        Monthly,
+        Custom
+    }
+}
+
+//Class
 namespace dotnetp2.Service
 {
+    using dotnetp2.DataAccess;
+    using dotnetp2.DTO;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
     public class ReportDeliveryConfigurationService : IReportDeliveryConfigurationService
     {
-        private readonly IReportDeliveryConfigurationDataAccess _dataAccess;
-
-        public ReportDeliveryConfigurationService(IReportDeliveryConfigurationDataAccess dataAccess)
+        private readonly IReportDeliveryConfigurationRepository _reportDeliveryConfigurationRepository;
+        public ReportDeliveryConfigurationService(IReportDeliveryConfigurationRepository reportDeliveryConfigurationRepository)
         {
-            _dataAccess = dataAccess;
+            _reportDeliveryConfigurationRepository = reportDeliveryConfigurationRepository;
         }
 
-        public async Task<List<ReportDeliveryConfigurationModel>> GetAllAsync()
+        public async Task<ReportDeliveryConfigurationModel> GetReportDeliveryConfiguration(int id)
         {
-            return await _dataAccess.GetAllAsync();
+            return await _reportDeliveryConfigurationRepository.GetReportDeliveryConfiguration(id);
         }
 
-        public async Task<ReportDeliveryConfigurationModel> GetByIdAsync(int id)
+        public async Task<IEnumerable<ReportDeliveryConfigurationModel>> GetAllReportDeliveryConfigurations()
         {
-            return await _dataAccess.GetByIdAsync(id);
+            return await _reportDeliveryConfigurationRepository.GetAllReportDeliveryConfigurations();
         }
 
-        public async Task<int> AddAsync(ReportDeliveryConfigurationModel configuration)
+        public async Task<int> CreateReportDeliveryConfiguration(ReportDeliveryConfigurationModel reportDeliveryConfiguration)
         {
-            // Perform validation and business logic before adding
-            ValidateDestination(configuration.DestinationType, configuration.DestinationAddress);
-            ValidateDeliveryConfiguration(configuration);
+            // Validate user-provided values for DayOfWeek or DayOfMonth based on the Custom frequency selection.
+            ValidateDestination(reportDeliveryConfiguration);
 
-            return await _dataAccess.AddAsync(configuration);
+            // Validate and store the user-provided values for DayOfWeek or DayOfMonth based on the Custom frequency selection.
+            ValidateDeliveryConfiguration(reportDeliveryConfiguration);
+
+            // Create a ReportDeliveryConfigurationModel in the Database
+            return await _reportDeliveryConfigurationRepository.CreateReportDeliveryConfiguration(reportDeliveryConfiguration);
         }
 
-        public async Task UpdateAsync(ReportDeliveryConfigurationModel configuration)
+        public async Task<bool> UpdateReportDeliveryConfiguration(ReportDeliveryConfigurationModel reportDeliveryConfiguration)
         {
-            // Perform validation and business logic before updating
-            ValidateDestination(configuration.DestinationType, configuration.DestinationAddress);
-            ValidateDeliveryConfiguration(configuration);
+            // Validate user-provided values for DayOfWeek or DayOfMonth based on the Custom frequency selection.
+            ValidateDestination(reportDeliveryConfiguration);
 
-            await _dataAccess.UpdateAsync(configuration);
+            // Validate and store the user-provided values for DayOfWeek or DayOfMonth based on the Custom frequency selection.
+            ValidateDeliveryConfiguration(reportDeliveryConfiguration);
+
+            // Update the ReportDeliveryConfigurationModel in the Database
+            return await _reportDeliveryConfigurationRepository.UpdateReportDeliveryConfiguration(reportDeliveryConfiguration);
         }
 
-        public async Task DeleteAsync(int id)
+        public async Task<bool> DeleteReportDeliveryConfiguration(int id)
         {
-            await _dataAccess.DeleteAsync(id);
+            return await _reportDeliveryConfigurationRepository.DeleteReportDeliveryConfiguration(id);
         }
 
-        private void ValidateDestination(DestinationType destinationType, string destinationAddress)
+        private void ValidateDestination(ReportDeliveryConfigurationModel reportDeliveryConfiguration)
         {
-            // Perform destination validation logic based on the selected destination type
-            switch (destinationType)
+            // Validate the DestinationAddress based on the selected DestinationType
+            switch (reportDeliveryConfiguration.DestinationType)
             {
                 case DestinationType.Email:
-                    // Validate email address format
-                    if (!IsValidEmailAddress(destinationAddress))
-                        throw new Exception("Invalid email address");
+                    // Validate Email
+                    if (string.IsNullOrWhiteSpace(reportDeliveryConfiguration.DestinationAddress))
+                    {
+                        throw new ArgumentException("Email must be provided!");
+                    }
                     break;
 
-                case DestinationType.CloudStorage:
-                    // Validate cloud storage address format
-                    if (!IsValidCloudStorageAddress(destinationAddress))
-                        throw new Exception("Invalid cloud storage address");
+                case DestinationType.FTP:
+                    // Validate FTP
+                    if (string.IsNullOrWhiteSpace(reportDeliveryConfiguration.DestinationAddress))
+                    {
+                        throw new ArgumentException("FTP URL must be provided!");
+                    }
                     break;
 
-                case DestinationType.InternalServer:
-                    // Validate internal server address format
-                    if (!IsValidInternalServerAddress(destinationAddress))
-                        throw new Exception("Invalid internal server address");
+                case DestinationType.SharePoint:
+                    // Validate SharePoint
+                    if (string.IsNullOrWhiteSpace(reportDeliveryConfiguration.DestinationAddress))
+                    {
+                        throw new ArgumentException("SharePoint URL must be provided!");
+                    }
                     break;
 
-                default:
-                    throw new Exception("Invalid destination type");
+                case DestinationType.Custom:
+                    // Validate Custom
+                    if (string.IsNullOrWhiteSpace(reportDeliveryConfiguration.DestinationAddress))
+                    {
+                        throw new ArgumentException("Custom URL must be provided!");
+                    }
+                    break;
             }
         }
 
-        private void ValidateDeliveryConfiguration(ReportDeliveryConfigurationModel configuration)
+        private void ValidateDeliveryConfiguration(ReportDeliveryConfigurationModel reportDeliveryConfiguration)
         {
-            // Perform delivery configuration validation logic
-            // Ensure that the selected FrequencyType, DayOfWeek, DayOfMonth, and DeliveryTime are valid
-            // Handle custom frequency selection and validate DayOfWeek or DayOfMonth accordingly
-            // Handle time zone logic to ensure reports are sent at the specified local time for each user
-            // Validate other fields based on the selected file type and destination type
-        }
+            // Validate the FrequencyType, DayOfWeek, DayOfMonth, and DeliveryTime
+            if (reportDeliveryConfiguration.FrequencyType == FrequencyType.Custom)
+            {
+                if (string.IsNullOrWhiteSpace(reportDeliveryConfiguration.DayOfWeek) && string.IsNullOrWhiteSpace(reportDeliveryConfiguration.DayOfMonth))
+                {
+                    throw new ArgumentException("DayOfWeek or DayOfMonth must be provided for Custom Frequency");
+                }
+            }
 
-        private bool IsValidEmailAddress(string emailAddress)
-        {
-            // Perform email address validation logic
-            // Return true if valid, false otherwise
-            // Example: check if the email address has a valid format
-            return true;
-        }
-
-        private bool IsValidCloudStorageAddress(string cloudStorageAddress)
-        {
-            // Perform cloud storage address validation logic
-            // Return true if valid, false otherwise
-            // Example: check if the cloud storage address has a valid format
-            return true;
-        }
-
-        private bool IsValidInternalServerAddress(string internalServerAddress)
-        {
-            // Perform internal server address validation logic
-            // Return true if valid, false otherwise
-            // Example: check if the internal server address has a valid format
-            return true;
-        }
-
-        // Other helper methods and business logic methods can be added as needed
-    }
-}
+            if (reportDeliveryConfiguration.DeliveryTime == TimeSpan.Zero)
+            {
+                throw new ArgumentException("DeliveryTime must be provided!");

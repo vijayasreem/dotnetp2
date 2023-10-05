@@ -1,5 +1,6 @@
 ﻿namespace dotnetp2
 {
+    // Enumeration to represent the available destination types
     public enum DestinationType
     {
         Email,
@@ -7,26 +8,7 @@
         InternalServer
     }
 
-    public class ReportDeliveryConfigurationModel
-    {
-        public DestinationType DestinationType { get; set; }
-        public string DestinationAddress { get; set; }
-
-        public void ValidateDestination()
-        {
-            // TODO: Implement validation logic for DestinationAddress based on DestinationType
-        }
-    }
-
-    public class ReportGenerator
-    {
-        public FileType GenerateReport(DestinationType fileType)
-        {
-            // TODO: Implement logic for generating reports based on the selected file type
-            return FileType.PDF;
-        }
-    }
-
+    // Enumeration to represent the available file type formats
     public enum FileType
     {
         PDF,
@@ -35,31 +17,42 @@
         Custom
     }
 
-    public class SharePointIntegrationModel
+    // Class to represent the report delivery configuration
+    public class ReportDeliveryConfigurationModel
     {
-        public string SharePointUrl { get; set; }
-        public string DocumentLibraryName { get; set; }
+        public int Id { get; set; }
+        public DestinationType DestinationType { get; set; }
+        public string DestinationAddress { get; set; }
+        public int? DayOfWeek { get; set; }
+        public int? DayOfMonth { get; set; }
+        public TimeSpan DeliveryTime { get; set; }
     }
 
-    public class ScheduleConfigurationModel
+    // Class to generate reports
+    public class ReportGeneratorModel
     {
-        public FileType ReportFileType { get; set; }
-        public ReportDeliveryConfigurationModel DeliveryConfiguration { get; set; }
-        public string CustomFormat { get; set; }
-        public FrequencyType FrequencyType { get; set; }
-        public int DayOfWeek { get; set; }
-        public int DayOfMonth { get; set; }
-        public TimeSpan DeliveryTime { get; set; }
-
-        public void ValidateDeliveryConfiguration()
+        public void GenerateReport(FileType fileType)
         {
-            // TODO: Implement validation logic for FrequencyType, DayOfWeek, DayOfMonth, and DeliveryTime
+            // Logic to handle file type selection for PDF, CSV, Excel, and Custom formats.
+        }
+
+        public void ValidateDestination(ReportDeliveryConfigurationModel reportDeliveryConfiguration)
+        {
+            // Logic to validate the DestinationAddress based on the selected DestinationType.
+        }
+
+        public void ValidateDeliveryConfiguration(ReportDeliveryConfigurationModel reportDeliveryConfiguration)
+        {
+            // Logic to ensure that the selected FrequencyType, DayOfWeek, DayOfMonth, and DeliveryTime are valid.
         }
     }
 
-    public enum FrequencyType
+    // Class to handle the integration with SharePoint
+    public class SharePointIntegrationModel
     {
-        DaysOfWeek,
-        DaysOfMonth
+        public void DeliverGLReport(string clientName, DateTime deliveryDate, string sharePointUrl, string documentLibraryName)
+        {
+            // Logic to connect to the specified SharePoint site and access the specified document library.
+        }
     }
 }
