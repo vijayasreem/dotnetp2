@@ -1,12 +1,16 @@
-﻿using dotnetp2.DTO;
+﻿();
+            }
+        }
+    }
+}
 
 namespace dotnetp2.Service
 {
     public interface IFtpConfigurationRepository
     {
-        Task<int> CreateFtpConfigurationAsync(FtpConfigurationModel model);
-        Task<FtpConfigurationModel> GetFtpConfigurationAsync(int id);
-        Task<int> UpdateFtpConfigurationAsync(FtpConfigurationModel model);
-        Task<int> DeleteFtpConfigurationAsync(int id);
+        Task<int> CreateAsync(FtpConfigurationModel model);
+        Task<FtpConfigurationModel> ReadAsync(int id);
+        Task<bool> UpdateAsync(FtpConfigurationModel model);
+        Task<bool> DeleteAsync(int id);
     }
 }

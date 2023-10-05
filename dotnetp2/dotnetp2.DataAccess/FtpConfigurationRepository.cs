@@ -1,83 +1,133 @@
-﻿namespace dotnetp2.Repository
+﻿();
+            }
+        }
+    }
+}
+
+public class FtpConfigurationRepository : IFtpConfigurationRepository
 {
-    public class FtpConfigurationRepository : IFtpConfigurationRepository
+    private readonly SqlConnection connection;
+    private string connectionString;
+
+    public FtpConfigurationRepository(string connectionString)
     {
-        private readonly string _connectionString;
+        this.connectionString = connectionString;
+        this.connection = new SqlConnection(connectionString);
+    }
+    
+    public async Task<int> CreateAsync(FtpConfigurationModel model)
+    {
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandText = "INSERT INTO FtpConfiguration (FtpUrl, Credential, FilePath) VALUES (@FtpUrl, @Credential, @FilePath); SELECT CAST(scope_identity() AS int)";
+        cmd.Parameters.AddWithValue("@FtpUrl", model.FtpUrl);
+        cmd.Parameters.AddWithValue("@Credential", model.Credential);
+        cmd.Parameters.AddWithValue("@FilePath", model.FilePath);
+        cmd.CommandType = CommandType.Text;
+        cmd.Connection = connection;
 
-        public FtpConfigurationRepository(string connectionString)
+        try
         {
-            _connectionString = connectionString;
+            connection.Open();
+            int newId = (int)await cmd.ExecuteScalarAsync();
+            model.Id = newId;
+            return newId;
         }
-
-        public async Task<int> CreateFtpConfigurationAsync(FtpConfigurationModel model)
+        catch (Exception)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                var cmd = new SqlCommand("INSERT INTO FtpConfiguration (FtpUrl, Password, FilePath) VALUES (@FtpUrl, @Password, @FilePath)", connection);
-                cmd.Parameters.AddWithValue("@FtpUrl", model.FtpUrl);
-                cmd.Parameters.AddWithValue("@Password", model.Password);
-                cmd.Parameters.AddWithValue("@FilePath", model.FilePath);
-
-                return await cmd.ExecuteNonQueryAsync();
-            }
+            throw;
         }
-
-        public async Task<FtpConfigurationModel> GetFtpConfigurationAsync(int id)
+        finally
         {
-            using (var connection = new SqlConnection(_connectionString))
+            connection.Close();
+        }
+    }
+
+    public async Task<FtpConfigurationModel> ReadAsync(int id)
+    {
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandText = "SELECT * FROM FtpConfiguration WHERE Id = @Id";
+        cmd.Parameters.AddWithValue("@Id", id);
+        cmd.CommandType = CommandType.Text;
+        cmd.Connection = connection;
+
+        try
+        {
+            connection.Open();
+            SqlDataReader reader = await cmd.ExecuteReaderAsync();
+
+            FtpConfigurationModel model = null;
+            if (reader.HasRows)
             {
-                await connection.OpenAsync();
-
-                var cmd = new SqlCommand("SELECT * FROM FtpConfiguration WHERE Id = @Id", connection);
-                cmd.Parameters.AddWithValue("@Id", id);
-
-                var reader = await cmd.ExecuteReaderAsync();
-
-                if (reader.HasRows)
+                reader.Read();
+                model = new FtpConfigurationModel()
                 {
-                    reader.Read();
-                    return new FtpConfigurationModel
-                    {
-                        Id = reader.GetInt32(0),
-                        FtpUrl = reader.GetString(1),
-                        Password = reader.GetString(2),
-                        FilePath = reader.GetString(3)
-                    };
-                }
-
-                return null;
+                    Id = (int)reader["Id"],
+                    FtpUrl = (string)reader["FtpUrl"],
+                    Credential = (string)reader["Credential"],
+                    FilePath = (string)reader["FilePath"]
+                };
             }
+            return model;
         }
-
-        public async Task<int> UpdateFtpConfigurationAsync(FtpConfigurationModel model)
+        catch (Exception)
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
-
-                var cmd = new SqlCommand("UPDATE FtpConfiguration SET FtpUrl = @FtpUrl, Password = @Password, FilePath = @FilePath WHERE Id = @Id", connection);
-                cmd.Parameters.AddWithValue("@FtpUrl", model.FtpUrl);
-                cmd.Parameters.AddWithValue("@Password", model.Password);
-                cmd.Parameters.AddWithValue("@FilePath", model.FilePath);
-                cmd.Parameters.AddWithValue("@Id", model.Id);
-
-                return await cmd.ExecuteNonQueryAsync();
-            }
+            throw;
         }
-
-        public async Task<int> DeleteFtpConfigurationAsync(int id)
+        finally
         {
-            using (var connection = new SqlConnection(_connectionString))
-            {
-                await connection.OpenAsync();
+            connection.Close();
+        }
+    }
 
-                var cmd = new SqlCommand("DELETE FROM FtpConfiguration WHERE Id = @Id", connection);
-                cmd.Parameters.AddWithValue("@Id", id);
+    public async Task<bool> UpdateAsync(FtpConfigurationModel model)
+    {
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandText = "UPDATE FtpConfiguration SET FtpUrl = @FtpUrl, Credential = @Credential, FilePath = @FilePath WHERE Id = @Id";
+        cmd.Parameters.AddWithValue("@FtpUrl", model.FtpUrl);
+        cmd.Parameters.AddWithValue("@Credential", model.Credential);
+        cmd.Parameters.AddWithValue("@FilePath", model.FilePath);
+        cmd.Parameters.AddWithValue("@Id", model.Id);
+        cmd.CommandType = CommandType.Text;
+        cmd.Connection = connection;
 
-                return await cmd.ExecuteNonQueryAsync();
-            }
+        try
+        {
+            connection.Open();
+            await cmd.ExecuteNonQueryAsync();
+            return true;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            connection.Close();
+        }
+    }
+
+
+    public async Task<bool> DeleteAsync(int id)
+    {
+        SqlCommand cmd = new SqlCommand();
+        cmd.CommandText = "DELETE FROM FtpConfiguration WHERE Id = @Id";
+        cmd.Parameters.AddWithValue("@Id", id);
+        cmd.CommandType = CommandType.Text;
+        cmd.Connection = connection;
+
+        try
+        {
+            connection.Open();
+            await cmd.ExecuteNonQueryAsync();
+            return true;
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            connection.Close();
         }
     }
 }
