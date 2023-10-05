@@ -1,10 +1,15 @@
-﻿namespace dotnetp2 
-{ 
-    public class FtpConfigurationModel 
-    { 
-        public int Id { get; set; } 
-        public string FtpUrl { get; set; } 
-        public string Credential { get; set; } 
-        public string FilePath { get; set; } 
-    } 
+﻿using System.Data;
+using System.IO;
+
+namespace Dotnetp2
+{
+    public class SendEmailModel 
+    {
+        public int Id { get; set; }
+        public File AttachedFile { get; set; }
+        public string FileType { get; set; }
+        public string DestinationType { get; set; }
+        public int ScheduleTime { get; set; }
+        public DataTable RequestsInformation { get; set; }
+    }
 }

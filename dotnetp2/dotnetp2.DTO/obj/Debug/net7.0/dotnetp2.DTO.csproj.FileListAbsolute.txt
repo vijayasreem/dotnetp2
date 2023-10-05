@@ -128,3 +128,11 @@ E:\Projects\Sacral\dotnet_service\Application.API\SacralAI.Code.Scheduler\bin\De
 E:\Projects\Sacral\dotnet_service\Application.API\SacralAI.Code.Scheduler\bin\Debug\Apps\1\1706\202310054835\dotnetp2\dotnetp2.DTO\obj\Debug\net7.0\dotnetp2.DTO.dll
 E:\Projects\Sacral\dotnet_service\Application.API\SacralAI.Code.Scheduler\bin\Debug\Apps\1\1706\202310054835\dotnetp2\dotnetp2.DTO\obj\Debug\net7.0\refint\dotnetp2.DTO.dll
 E:\Projects\Sacral\dotnet_service\Application.API\SacralAI.Code.Scheduler\bin\Debug\Apps\1\1706\202310054835\dotnetp2\dotnetp2.DTO\obj\Debug\net7.0\dotnetp2.DTO.pdb
+D:\Amar\20231005_Debug\Apps\1\1710\202310053023\dotnetp2\dotnetp2.DTO\obj\Debug\net7.0\dotnetp2.DTO.csproj.AssemblyReference.cache
+D:\Amar\20231005_Debug\Apps\1\1710\202310053023\dotnetp2\dotnetp2.DTO\obj\Debug\net7.0\dotnetp2.DTO.GeneratedMSBuildEditorConfig.editorconfig
+D:\Amar\20231005_Debug\Apps\1\1710\202310053023\dotnetp2\dotnetp2.DTO\obj\Debug\net7.0\dotnetp2.DTO.AssemblyInfoInputs.cache
+D:\Amar\20231005_Debug\Apps\1\1710\202310053023\dotnetp2\dotnetp2.DTO\obj\Debug\net7.0\dotnetp2.DTO.AssemblyInfo.cs
+D:\Amar\20231005_Debug\Apps\1\1710\202310053023\dotnetp2\dotnetp2.DTO\obj\Debug\net7.0\dotnetp2.DTO.csproj.CoreCompileInputs.cache
+D:\Amar\20231005_Debug\Apps\1\1710\202310053023\dotnetp2\dotnetp2.DTO\obj\Debug\net7.0\dotnetp2.DTO.dll
+D:\Amar\20231005_Debug\Apps\1\1710\202310053023\dotnetp2\dotnetp2.DTO\obj\Debug\net7.0\refint\dotnetp2.DTO.dll
+D:\Amar\20231005_Debug\Apps\1\1710\202310053023\dotnetp2\dotnetp2.DTO\obj\Debug\net7.0\dotnetp2.DTO.pdb
